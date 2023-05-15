@@ -12,13 +12,13 @@ export class UsersService {
 	}
 
 	async findOne(user: Partial<UserDTO>) {
-		const { email, firstname, lastname, birthday, id } = user;
-		return this.prisma.user.findFirst({ where: { OR: [{ email, firstname, lastname, birthday, id }] } });
+		const { email, firstName, lastName, birthday, id } = user;
+		return this.prisma.user.findFirst({ where: { OR: [{ email, firstName, lastName, birthday, id }] } });
 	}
 
 	async findManyWhere(user: Partial<UserDTO>) {
-		const { email, firstname, lastname, birthday } = user;
-		return this.prisma.user.findMany({ where: { OR: [{ email, firstname, lastname, birthday }] } });
+		const { email, firstName, lastName, birthday } = user;
+		return this.prisma.user.findMany({ where: { OR: [{ email, firstName, lastName, birthday }] } });
 	}
 
 	async findAll() {

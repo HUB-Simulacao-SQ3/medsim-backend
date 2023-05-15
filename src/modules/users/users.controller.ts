@@ -14,7 +14,7 @@ export class UsersController {
 	}
 
 	@Post('user')
-	async findOne(@Body() data: any) {
+	async findMany(@Body() data: any) {
 		return await this.usersService.findOne(data);
 	}
 

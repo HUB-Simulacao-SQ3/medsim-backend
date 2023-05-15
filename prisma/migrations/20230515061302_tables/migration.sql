@@ -4,8 +4,8 @@ CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "firstname" TEXT NOT NULL,
-    "lastname" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "image" BYTEA,
     "email" TEXT NOT NULL,
@@ -21,8 +21,8 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Patient" (
     "id" TEXT NOT NULL,
-    "firstname" TEXT NOT NULL,
-    "lastname" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
     "image" BYTEA NOT NULL,
     "birthday" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -48,12 +48,12 @@ CREATE TABLE "Quiz" (
 CREATE TABLE "Case" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "quizId" TEXT NOT NULL,
+    "patientId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "chiefComplaint" TEXT NOT NULL,
     "scenery" TEXT NOT NULL,
-    "patientId" TEXT NOT NULL,
-    "quizId" TEXT NOT NULL,
 
     CONSTRAINT "Case_pkey" PRIMARY KEY ("id")
 );

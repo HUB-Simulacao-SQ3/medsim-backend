@@ -30,8 +30,8 @@ model User {
 
 model Patient {
   id        String   @id @unique @default(uuid())
-  firstname String
-  lastname  String
+  firstName String
+  lastName  String
   image     Bytes
   birthday  String
   createdAt DateTime @default(now())
@@ -55,12 +55,12 @@ model Quiz {
 model Case {
   id             String @id @unique @default(uuid())
   userId         String
+  quizId         String
+  patientId      String
   title          String
   description    String
   chiefComplaint String
   scenery        String
-  patientId      String
-  quizId         String
 
   user    User    @relation(fields: [userId], references: [id])
   patient Patient @relation(fields: [patientId], references: [id])
