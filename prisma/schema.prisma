@@ -53,9 +53,9 @@ model Quiz {
 }
 
 model Case {
-  id             String @id @unique @default(uuid())
+  id             String  @id @unique @default(uuid())
   userId         String
-  quizId         String
+  quizId         String?
   patientId      String
   title          String
   description    String
@@ -64,5 +64,5 @@ model Case {
 
   user    User    @relation(fields: [userId], references: [id])
   patient Patient @relation(fields: [patientId], references: [id])
-  quiz    Quiz    @relation(fields: [quizId], references: [id])
+  quiz    Quiz?   @relation(fields: [quizId], references: [id])
 }

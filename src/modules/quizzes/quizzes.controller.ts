@@ -9,8 +9,8 @@ export class QuizzesController {
 
 	@Public()
 	@Post()
-	async create(@Body() user: QuizzesDTO) {
-		return await this.quizzesService.create(user);
+	async create(@Body() data: QuizzesDTO) {
+		return await this.quizzesService.create(data);
 	}
 
 	@Post('quiz')
