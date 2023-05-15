@@ -1,0 +1,9 @@
+{
+  "bracketSpacing": true,
+  "quoteProps": "as-needed",
+  "singleQuote": true,
+  "tabWidth": 4,
+  "useTabs": true,
+  "printWidth": 180,
+  "endOfLine": "auto"
+}
