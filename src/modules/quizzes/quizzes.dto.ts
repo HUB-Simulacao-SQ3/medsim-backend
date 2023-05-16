@@ -1,4 +1,4 @@
 import { Prisma } from '@prisma/client';
-type QuizzesDTO = Prisma.QuizCreateInput;
+type QuizzesDTO = Prisma.QuizUncheckedCreateInput;
 
 export { QuizzesDTO };

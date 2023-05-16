@@ -1,30 +1,83 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
 import { CasesService } from './cases.service';
-import { Public } from '../auth/auth.guard';
 import { CaseDTO } from './cases.dto';
+import { ApiResult } from '../../core/api.dto';
 
 @Controller('cases')
 export class CasesController {
 	constructor(private casesService: CasesService) {}
 
-	@Public()
 	@Post()
-	async create(@Body() data: CaseDTO) {
-		return await this.casesService.create(data);
+	async create(@Body() data: CaseDTO, @Request() request) {
+		data.userId = request.user.id;
+		const cases = await this.casesService.create(data);
+		if (cases?.id) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: cases,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: cases,
+			});
+		}
 	}
 
 	@Post('case')
-	async findManyWhere(@Body() data: CaseDTO) {
-		return await this.casesService.findOne(data);
+	async findManyWhere(@Body() data: CaseDTO, @Request() request) {
+		data.userId = request?.user?.id;
+		const cases = await this.casesService.findManyWhere(data);
+		if (cases) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: cases,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: cases,
+			});
+		}
 	}
 
 	@Get()
 	async findAll() {
-		return await this.casesService.findAll();
+		const cases = await this.casesService.findAll();
+		if (cases) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: cases,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: cases,
+			});
+		}
 	}
 
 	@Get(':id')
 	async findById(@Param('id') id: string) {
-		return await this.casesService.findOne({ id });
+		const cases = await this.casesService.findOne({ id });
+		if (cases.id) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: cases,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: cases,
+			});
+		}
 	}
 }

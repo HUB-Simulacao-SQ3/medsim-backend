@@ -1,4 +1,4 @@
 import { Prisma } from '@prisma/client';
-type PatientDTO = Prisma.PatientCreateInput;
+type PatientDTO = Prisma.PatientUncheckedCreateInput;
 
 export { PatientDTO };

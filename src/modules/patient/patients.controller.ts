@@ -1,30 +1,83 @@
-import { Controller, Body, Post, Get, Param } from '@nestjs/common';
+import { Controller, Body, Post, Get, Param, Request } from '@nestjs/common';
 import { PatientDTO } from './patients.dto';
 import { PatientsService } from './patients.service';
-import { Public } from '../auth/auth.guard';
+import { ApiResult } from '../../core/api.dto';
 
 @Controller('patients')
 export class PatientsController {
 	constructor(private patientsService: PatientsService) {}
 
-	@Public()
 	@Post()
-	async create(@Body() user: PatientDTO) {
-		return await this.patientsService.create(user);
+	async create(@Body() data: PatientDTO, @Request() request) {
+		data.userId = request['user']['id'];
+		const patient = await this.patientsService.create(data);
+		if (patient.id) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: patient,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: patient,
+			});
+		}
 	}
 
 	@Post('patient')
-	async findMany(@Body() data: any) {
-		return await this.patientsService.findOne(data);
+	async findMany(@Body() data: any, @Request() request) {
+		const patientFindMany = await this.patientsService.findOne(data, request['user']['id']);
+		if (patientFindMany) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: patientFindMany,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: patientFindMany,
+			});
+		}
 	}
 
 	@Get()
-	async findAll() {
-		return await this.patientsService.findAll();
+	async findAll(@Request() request) {
+		const userId = request['user']['id'];
+		const patientsFindAll = await this.patientsService.findAll(userId);
+		if (patientsFindAll) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: patientsFindAll,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: patientsFindAll,
+			});
+		}
 	}
 
 	@Get(':id')
-	async findById(@Param('id') id: string) {
-		return await this.patientsService.findOne({ id });
+	async findById(@Param('id') id: string, @Request() request) {
+		const patientFindById = await this.patientsService.findOne({ id }, request['user']['id']);
+		if (patientFindById) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: patientFindById,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: patientFindById,
+			});
+		}
 	}
 }

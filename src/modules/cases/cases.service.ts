@@ -6,21 +6,43 @@ import { CaseDTO } from './cases.dto';
 export class CasesService {
 	constructor(private prisma: PrismaService) {}
 	async findOne(data: Partial<CaseDTO>) {
-		const { chiefComplaint, description, id, scenery, title } = data;
-		return this.prisma.case.findFirst({ where: { OR: [{ chiefComplaint, description, id, scenery, title }] } });
+		const { id } = data;
+		return this.prisma.case.findFirst({ where: { id }, include: { quiz: true, patient: true } });
 	}
 
 	async findManyWhere(data: Partial<CaseDTO>) {
-		const { chiefComplaint, description, id, scenery, title } = data;
-		return this.prisma.case.findMany({ where: { OR: [{ chiefComplaint, description, id, scenery, title }] } });
+		const { chiefComplaint, description, id, scenery, title, difficulty, userId } = data;
+
+		const OR = { chiefComplaint, description, id, scenery, title, difficulty, userId };
+		const AND = { userId };
+		const NOT = { userId };
+
+		return this.prisma.case.findMany({
+			where: {
+				OR: [OR],
+				...(data.contentCreatedBy === 'OTHERS' ? { NOT: [NOT] } : { AND: [AND] }),
+			},
+			include: {
+				quiz: {
+					select: { id: true },
+				},
+			},
+		});
 	}
 	async findAll() {
-		return await this.prisma.case.findMany();
+		return await this.prisma.case.findMany({
+			include: {
+				user: { select: { id: true } },
+				quiz: { select: { id: true } },
+			},
+		});
 	}
 	async create(data: CaseDTO) {
 		const { id } = data;
-		const userExists = await this.prisma.case.findFirst({ where: { id } });
-		if (userExists) return userExists;
+		if (id) {
+			const userUpdate = await this.prisma.case.update({ data, where: { id } });
+			if (userUpdate) return userUpdate;
+		}
 		const user = await this.prisma.case.create({ data });
 		if (user?.id) return user;
 		return undefined;

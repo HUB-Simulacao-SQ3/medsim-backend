@@ -21,10 +21,15 @@ export class QuizzesService {
 	}
 
 	async create(data: QuizzesDTO) {
-		const userExists = await this.prisma.quiz.findFirst({ where: { id: data.id } });
-		if (userExists) return userExists;
+		if (data?.id) {
+			const userUpdate = await this.prisma.quiz.update({
+				data,
+				where: { id: data.id },
+			});
+			return userUpdate;
+		}
 		const user = await this.prisma.quiz.create({ data });
 		if (user?.id) return user;
-		return undefined;
+		return data;
 	}
 }

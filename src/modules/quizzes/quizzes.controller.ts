@@ -1,30 +1,85 @@
-import { Controller, Body, Post, Get, Param } from '@nestjs/common';
+import { Controller, Body, Post, Get, Param, Request } from '@nestjs/common';
 import { QuizzesDTO } from './quizzes.dto';
 import { QuizzesService } from './quizzes.service';
-import { Public } from '../auth/auth.guard';
+import { ApiResult } from '../../core/api.dto';
 
 @Controller('quizzes')
 export class QuizzesController {
 	constructor(private quizzesService: QuizzesService) {}
 
-	@Public()
 	@Post()
-	async create(@Body() data: QuizzesDTO) {
-		return await this.quizzesService.create(data);
+	async create(@Body() data: QuizzesDTO, @Request() request) {
+		data.userId = request.user.id;
+		const quizzes = await this.quizzesService.create(data);
+		if (quizzes?.id) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: quizzes,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: quizzes,
+			});
+		}
+		return;
 	}
 
 	@Post('quiz')
 	async findMany(@Body() data: any) {
-		return await this.quizzesService.findOne(data);
+		const quizzes = await this.quizzesService.findOne(data);
+		if (quizzes?.id) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: quizzes,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: quizzes,
+			});
+		}
+		return;
 	}
 
 	@Get()
 	async findAll() {
-		return await this.quizzesService.findAll();
+		const quizzes = await this.quizzesService.findAll();
+		if (quizzes) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: quizzes,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: quizzes,
+			});
+		}
 	}
 
 	@Get(':id')
 	async findById(@Param('id') id: string) {
-		return await this.quizzesService.findOne({ id });
+		const quizzes = await this.quizzesService.findOne({ id });
+		if (quizzes.id) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: quizzes,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: quizzes,
+			});
+		}
+		return;
 	}
 }
