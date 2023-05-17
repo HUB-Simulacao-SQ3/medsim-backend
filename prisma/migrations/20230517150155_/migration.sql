@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 
+-- CreateEnum
+CREATE TYPE "Difficulty" AS ENUM ('EASY', 'MEDIUM', 'HARD');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -26,6 +29,10 @@ CREATE TABLE "Patient" (
     "userId" TEXT NOT NULL,
     "image" BYTEA,
     "birthday" TEXT NOT NULL,
+    "profession" TEXT,
+    "height" TEXT NOT NULL,
+    "wight" TEXT NOT NULL,
+    "chiefComplaint" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -36,8 +43,9 @@ CREATE TABLE "Patient" (
 CREATE TABLE "Quiz" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "caseId" TEXT NOT NULL,
     "questions" JSONB NOT NULL,
-    "edges" JSONB NOT NULL,
+    "edges" JSONB,
     "nodes" JSONB NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -49,12 +57,12 @@ CREATE TABLE "Quiz" (
 CREATE TABLE "Case" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "quizId" TEXT,
     "patientId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "chiefComplaint" TEXT NOT NULL,
     "scenery" TEXT NOT NULL,
+    "difficulty" "Difficulty" NOT NULL DEFAULT 'EASY',
 
     CONSTRAINT "Case_pkey" PRIMARY KEY ("id")
 );
@@ -72,6 +80,9 @@ CREATE UNIQUE INDEX "Patient_id_key" ON "Patient"("id");
 CREATE UNIQUE INDEX "Quiz_id_key" ON "Quiz"("id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Quiz_caseId_key" ON "Quiz"("caseId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Case_id_key" ON "Case"("id");
 
 -- AddForeignKey
@@ -81,10 +92,10 @@ ALTER TABLE "Patient" ADD CONSTRAINT "Patient_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Quiz" ADD CONSTRAINT "Quiz_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "Case"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Case" ADD CONSTRAINT "Case_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Case" ADD CONSTRAINT "Case_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "Patient"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Case" ADD CONSTRAINT "Case_quizId_fkey" FOREIGN KEY ("quizId") REFERENCES "Quiz"("id") ON DELETE SET NULL ON UPDATE CASCADE;

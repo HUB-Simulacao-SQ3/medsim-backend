@@ -21,7 +21,8 @@ export class PatientsService {
 	}
 
 	async create(data: PatientDTO) {
-		if (data?.id) {
+		console.log(data?.id);
+		if (data?.id !== undefined) {
 			const userUpdate = await this.prisma.patient.update({ data, where: { id: data.id } });
 			if (userUpdate) return userUpdate;
 		}

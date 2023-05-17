@@ -36,17 +36,18 @@ model User {
 }
 
 model Patient {
-  id         String   @id @unique @default(uuid())
-  firstName  String
-  lastName   String
-  userId     String
-  image      Bytes?
-  birthday   String
-  profession String?
-  height     String
-  wight      String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id             String   @id @unique @default(uuid())
+  firstName      String
+  lastName       String
+  userId         String
+  image          Bytes?
+  birthday       String
+  profession     String?
+  height         String
+  weight         String
+  chiefComplaint String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   Case Case[]
 
