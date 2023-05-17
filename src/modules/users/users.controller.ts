@@ -44,7 +44,22 @@ export class UsersController {
 
 	@Post('user')
 	async findMany(@Body() data: any) {
-		return await this.usersService.findOne(data);
+		const user = await this.usersService.findOne(data);
+		if (user.id) {
+			return new ApiResult({
+				code: 200,
+				data: { ...user },
+				success: true,
+				message: 'Usuário encontrado com sucesso!',
+			});
+		} else {
+			return new ApiResult({
+				code: 200,
+				data: {},
+				success: true,
+				message: 'Erro ao tentar encontrar o usuário!',
+			});
+		}
 	}
 
 	@Get()
@@ -54,6 +69,21 @@ export class UsersController {
 
 	@Get(':id')
 	async findById(@Param('id') id: string) {
-		return await this.usersService.findOne({ id });
+		const user = await this.usersService.findOne({ id });
+		if (user.id) {
+			return new ApiResult({
+				code: 200,
+				data: { ...user },
+				success: true,
+				message: 'Usuário encontrado com sucesso!',
+			});
+		} else {
+			return new ApiResult({
+				code: 200,
+				data: {},
+				success: true,
+				message: 'Erro ao tentar encontrar o usuário!',
+			});
+		}
 	}
 }
