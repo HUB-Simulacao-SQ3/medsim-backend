@@ -5,6 +5,6 @@ enum ContentCreatedByEnum {
 	OTHERS = 'OTHERS',
 }
 
-type CaseDTO = Prisma.CaseUncheckedCreateInput & { contentCreatedBy?: ContentCreatedByEnum };
+type CaseDTO = Prisma.CaseUncheckedCreateInput & { contentCreatedBy?: ContentCreatedByEnum; difficulty?: 'EASY' | 'MEDIUM' | 'HARD' | 'ALL' };
 
 export { CaseDTO };

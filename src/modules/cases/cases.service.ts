@@ -13,14 +13,10 @@ export class CasesService {
 	async findManyWhere(data: Partial<CaseDTO>) {
 		const { chiefComplaint, description, id, scenery, title, difficulty, userId } = data;
 
-		const OR = { chiefComplaint, description, id, scenery, title, difficulty, userId };
-		const AND = { userId };
-		const NOT = { userId };
-
 		return this.prisma.case.findMany({
 			where: {
-				OR: [OR],
-				...(data.contentCreatedBy === 'OTHERS' ? { NOT: [NOT] } : { AND: [AND] }),
+				OR: [{ chiefComplaint }, { description }, { id }, { scenery }, { title }, { difficulty }, { userId }],
+				AND: [data.contentCreatedBy === 'MY_CASES' ? { userId } : { NOT: { userId } }],
 			},
 			include: {
 				quiz: {
