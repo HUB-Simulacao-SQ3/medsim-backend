@@ -4,7 +4,10 @@ import { UsersService } from './users.service';
 import { Public } from '../auth/auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { ApiResult } from '../../core/api.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
 	constructor(private usersService: UsersService, private authService: AuthService) {}

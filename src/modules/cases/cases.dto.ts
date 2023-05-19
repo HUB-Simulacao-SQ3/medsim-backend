@@ -1,10 +1,39 @@
-import { Prisma } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
+import { Difficulty, Prisma } from '@prisma/client';
 enum ContentCreatedByEnum {
 	ALL = 'ALL',
 	MY_CASES = 'MY_CASES',
 	OTHERS = 'OTHERS',
 }
 
-type CaseDTO = Prisma.CaseUncheckedCreateInput & { contentCreatedBy?: ContentCreatedByEnum; difficulty?: 'EASY' | 'MEDIUM' | 'HARD' | 'ALL' };
+export class CaseDTO {
+	@ApiProperty()
+	id?: string;
 
-export { CaseDTO };
+	@ApiProperty()
+	userId: string;
+
+	@ApiProperty()
+	patientId: string;
+
+	@ApiProperty()
+	title: string;
+
+	@ApiProperty()
+	description: string;
+
+	@ApiProperty()
+	chiefComplaint: string;
+
+	@ApiProperty()
+	scenery: string;
+
+	@ApiProperty()
+	contentCreatedBy?: ContentCreatedByEnum;
+
+	@ApiProperty()
+	difficulty?: Difficulty & 'ALL';
+
+	@ApiProperty()
+	quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutCaseInput;
+}

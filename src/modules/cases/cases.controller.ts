@@ -1,8 +1,11 @@
-import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Request } from '@nestjs/common';
 import { CasesService } from './cases.service';
 import { CaseDTO } from './cases.dto';
 import { ApiResult } from '../../core/api.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Cases')
+@ApiBearerAuth()
 @Controller('cases')
 export class CasesController {
 	constructor(private casesService: CasesService) {}
@@ -26,10 +29,28 @@ export class CasesController {
 		}
 	}
 
-	@Post('case')
-	async findManyWhere(@Body() data: CaseDTO, @Request() request) {
+	@Get('filter')
+	async filterDifficultyContentCreatedBy(@Query() data: CaseDTO, @Request() request) {
 		data.userId = request?.user?.id;
-		const cases = await this.casesService.findManyWhere(data);
+		const cases = await this.casesService.filterDifficultyContentCreatedBy(data);
+		if (cases) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: cases,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: cases,
+			});
+		}
+	}
+
+	@Get('all')
+	async findManyWhere() {
+		const cases = await this.casesService.findManyWhere({ includePatient: true, includeQuiz: true });
 		if (cases) {
 			return new ApiResult({
 				code: 0,

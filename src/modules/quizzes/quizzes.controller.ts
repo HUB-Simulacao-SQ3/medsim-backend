@@ -2,7 +2,10 @@ import { Controller, Body, Post, Get, Param, Request } from '@nestjs/common';
 import { QuizzesDTO } from './quizzes.dto';
 import { QuizzesService } from './quizzes.service';
 import { ApiResult } from '../../core/api.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Quizzes')
+@ApiBearerAuth()
 @Controller('quizzes')
 export class QuizzesController {
 	constructor(private quizzesService: QuizzesService) {}

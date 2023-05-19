@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { UserDTO } from './users.dto';
+import { AuthDTO } from '../auth/auth.dto';
 
 @Injectable()
 export class UsersService {
 	constructor(private prisma: PrismaService) {}
 	private selectedDefault = { id: true, email: true, firstName: true, lastName: true, birthday: true };
-	async findAuth(user: UserDTO) {
-		const { email, password } = user;
+	async findAuth(auth: AuthDTO) {
+		const { email, password } = auth;
 		return this.prisma.user.findFirst({ where: { email, password } });
 	}
 

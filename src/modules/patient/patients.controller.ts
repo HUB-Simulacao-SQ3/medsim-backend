@@ -2,7 +2,10 @@ import { Controller, Body, Post, Get, Param, Request } from '@nestjs/common';
 import { PatientDTO } from './patients.dto';
 import { PatientsService } from './patients.service';
 import { ApiResult } from '../../core/api.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Patients')
+@ApiBearerAuth()
 @Controller('patients')
 export class PatientsController {
 	constructor(private patientsService: PatientsService) {}

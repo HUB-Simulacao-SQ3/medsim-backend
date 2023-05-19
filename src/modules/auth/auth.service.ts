@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { UserDTO } from '../users/users.dto';
 import { ApiResult } from '../../core/api.dto';
+import { AuthDTO } from './auth.dto';
 
 @Injectable()
 export class AuthService {
 	constructor(private usersService: UsersService, private jwtService: JwtService) {}
 
-	async signIn(user: UserDTO) {
-		const userFind = await this.usersService.findAuth(user);
-		if (userFind?.password !== user.password) {
+	async signIn(auth: AuthDTO) {
+		const authFind = await this.usersService.findAuth(auth);
+		if (authFind?.password !== auth.password) {
 			return new ApiResult<{ access_token: string }>({
 				code: 200,
 				data: { access_token: '' },
@@ -18,10 +18,10 @@ export class AuthService {
 				message: 'Não foi possível autenticar o usuário',
 			});
 		}
-		delete userFind.password;
-		const payload = { user: userFind };
+		delete authFind.password;
+		const payload = { user: authFind };
 
-		if (userFind?.id) {
+		if (authFind?.id) {
 			return new ApiResult<{ access_token: string }>({
 				code: 200,
 				data: {
