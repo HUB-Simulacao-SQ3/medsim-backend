@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Post, Query, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Request, UseFilters } from '@nestjs/common';
 import { CasesService } from './cases.service';
-import { CaseDTO } from './cases.dto';
+import { CaseDTO, CaseOptionalFieldsDTO, CreateCaseDTO } from './cases.dto';
 import { ApiResult } from '../../core/api.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Cases')
 @ApiBearerAuth()
@@ -11,7 +11,8 @@ export class CasesController {
 	constructor(private casesService: CasesService) {}
 
 	@Post()
-	async create(@Body() data: CaseDTO, @Request() request) {
+	@ApiBody({ type: CreateCaseDTO, required: false, enum: CreateCaseDTO['difficulty'] })
+	async create(@Body() data: CreateCaseDTO, @Request() request) {
 		data.userId = request.user.id;
 		const cases = await this.casesService.create(data);
 		if (cases?.id) {
@@ -30,7 +31,8 @@ export class CasesController {
 	}
 
 	@Get('filter')
-	async filterDifficultyContentCreatedBy(@Query() data: CaseDTO, @Request() request) {
+	@ApiQuery({ type: CaseOptionalFieldsDTO, required: false })
+	async filterDifficultyContentCreatedBy(@Query() data: Partial<CaseDTO>, @Request() request) {
 		data.userId = request?.user?.id;
 		const cases = await this.casesService.filterDifficultyContentCreatedBy(data);
 		if (cases) {
@@ -88,6 +90,24 @@ export class CasesController {
 	async findById(@Param('id') id: string) {
 		const cases = await this.casesService.findOne({ id });
 		if (cases.id) {
+			return new ApiResult({
+				code: 0,
+				success: true,
+				data: cases,
+			});
+		} else {
+			return new ApiResult({
+				code: 0,
+				success: false,
+				data: cases,
+			});
+		}
+	}
+
+	@Delete(':id')
+	async delete(@Param('id') id: string) {
+		const cases = await this.casesService.delete(id);
+		if (cases) {
 			return new ApiResult({
 				code: 0,
 				success: true,

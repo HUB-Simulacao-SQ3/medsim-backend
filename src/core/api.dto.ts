@@ -13,3 +13,21 @@ export class ApiResult<T = any> {
 		this.response = response;
 	}
 }
+
+// import { HttpStatus } from '@nestjs/common';
+
+// export interface IApiResultProps<TData = any> {
+// 	message: string;
+// 	error: string;
+// 	statusCode: HttpStatus;
+// 	success: boolean;
+// 	data: TData;
+// }
+
+// export class ApiResult<T = any> {
+// 	public response: IApiResultProps<T>;
+
+// 	constructor(response: IApiResultProps<T>) {
+// 		this.response = response;
+// 	}
+// }

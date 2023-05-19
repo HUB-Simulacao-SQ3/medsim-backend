@@ -38,12 +38,14 @@ export class CasesService {
 	}
 
 	async findAll() {
-		return await this.prisma.case.findMany({
+		const cases = await this.prisma.case.findMany({
 			include: {
 				user: { select: { id: true } },
 				quiz: { select: { id: true } },
 			},
 		});
+
+		return cases;
 	}
 
 	async create(data: CaseDTO) {
@@ -61,5 +63,9 @@ export class CasesService {
 		}
 
 		return {} as CaseDTO;
+	}
+
+	async delete(id: string) {
+		return this.prisma.case.delete({ where: { id } });
 	}
 }
