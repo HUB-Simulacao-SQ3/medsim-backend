@@ -1,33 +1,32 @@
-export interface IApiResponse<TData = any> {
-	code: number;
+export interface IApiInterceptorResponse<TData = any> {
+	statusCode: number;
 	success: boolean;
 	message?: string;
 	data?: TData;
-	detailsMessage?: [];
 }
 
-export class ApiResult<T = any> {
-	public response: IApiResponse<T>;
+export class ApiInterceptorResult<T = any> {
+	public response: IApiInterceptorResponse<T>;
 
-	constructor(response: IApiResponse<T>) {
+	constructor(response: IApiInterceptorResponse<T>) {
 		this.response = response;
 	}
 }
 
-// import { HttpStatus } from '@nestjs/common';
+export class ApiResult<T> {
+	private response: { data: T };
+	private message?: string;
 
-// export interface IApiResultProps<TData = any> {
-// 	message: string;
-// 	error: string;
-// 	statusCode: HttpStatus;
-// 	success: boolean;
-// 	data: TData;
-// }
+	constructor(response: { data: T }, message?: string) {
+		this.response = response;
+		this.message = message;
+	}
 
-// export class ApiResult<T = any> {
-// 	public response: IApiResultProps<T>;
-
-// 	constructor(response: IApiResultProps<T>) {
-// 		this.response = response;
-// 	}
-// }
+	static response<T>(response: { data: T }, message?: string) {
+		const apiResult = new ApiResult<T>(response, message);
+		return {
+			data: apiResult.response.data,
+			message: apiResult.message,
+		};
+	}
+}

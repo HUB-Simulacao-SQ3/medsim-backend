@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Request, UseFilters } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Request } from '@nestjs/common';
 import { CasesService } from './cases.service';
 import { CaseDTO, CaseOptionalFieldsDTO, CreateCaseDTO } from './cases.dto';
 import { ApiResult } from '../../core/api.dto';
@@ -16,17 +16,9 @@ export class CasesController {
 		data.userId = request.user.id;
 		const cases = await this.casesService.create(data);
 		if (cases?.id) {
-			return new ApiResult({
-				code: 0,
-				success: true,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		}
 	}
 
@@ -36,17 +28,9 @@ export class CasesController {
 		data.userId = request?.user?.id;
 		const cases = await this.casesService.filterDifficultyContentCreatedBy(data);
 		if (cases) {
-			return new ApiResult({
-				code: 0,
-				success: true,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		}
 	}
 
@@ -54,17 +38,9 @@ export class CasesController {
 	async findManyWhere() {
 		const cases = await this.casesService.findManyWhere({ includePatient: true, includeQuiz: true });
 		if (cases) {
-			return new ApiResult({
-				code: 0,
-				success: true,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		}
 	}
 
@@ -72,17 +48,9 @@ export class CasesController {
 	async findAll() {
 		const cases = await this.casesService.findAll();
 		if (cases) {
-			return new ApiResult({
-				code: 0,
-				success: true,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		}
 	}
 
@@ -90,17 +58,9 @@ export class CasesController {
 	async findById(@Param('id') id: string) {
 		const cases = await this.casesService.findOne({ id });
 		if (cases.id) {
-			return new ApiResult({
-				code: 0,
-				success: true,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		}
 	}
 
@@ -108,17 +68,9 @@ export class CasesController {
 	async delete(@Param('id') id: string) {
 		const cases = await this.casesService.delete(id);
 		if (cases) {
-			return new ApiResult({
-				code: 0,
-				success: true,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
-				data: cases,
-			});
+			return ApiResult.response({ data: cases });
 		}
 	}
 }

@@ -1,9 +1,16 @@
 import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
 import { Difficulty, Prisma } from '@prisma/client';
+
 enum ContentCreatedByEnum {
 	ALL = 'ALL',
 	MY_CASES = 'MY_CASES',
 	OTHERS = 'OTHERS',
+}
+
+enum DifficultyEnum {
+	EASY = 'EASY',
+	MEDIUM = 'MEDIUM',
+	HARD = 'HARD',
 }
 
 export class CaseDTO {
@@ -15,8 +22,7 @@ export class CaseDTO {
 	chiefComplaint: string;
 	scenery: string;
 	contentCreatedBy?: ContentCreatedByEnum;
-	@ApiProperty()
-	difficulty?: Difficulty & 'ALL';
+	difficulty?: DifficultyEnum;
 	quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutCaseInput;
 }
 

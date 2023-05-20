@@ -15,15 +15,11 @@ export class QuizzesController {
 		data.userId = request.user.id;
 		const quizzes = await this.quizzesService.create(data);
 		if (quizzes?.id) {
-			return new ApiResult({
-				code: 0,
-				success: true,
+			return ApiResult.response({
 				data: quizzes,
 			});
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
+			return ApiResult.response({
 				data: quizzes,
 			});
 		}
@@ -34,34 +30,25 @@ export class QuizzesController {
 	async findMany(@Body() data: any) {
 		const quizzes = await this.quizzesService.findOne(data);
 		if (quizzes?.id) {
-			return new ApiResult({
-				code: 0,
-				success: true,
+			return ApiResult.response({
 				data: quizzes,
 			});
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
+			return ApiResult.response({
 				data: quizzes,
 			});
 		}
-		return;
 	}
 
 	@Get()
 	async findAll() {
 		const quizzes = await this.quizzesService.findAll();
 		if (quizzes) {
-			return new ApiResult({
-				code: 0,
-				success: true,
+			return ApiResult.response({
 				data: quizzes,
 			});
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
+			return ApiResult.response({
 				data: quizzes,
 			});
 		}
@@ -71,18 +58,13 @@ export class QuizzesController {
 	async findById(@Param('id') id: string) {
 		const quizzes = await this.quizzesService.findOne({ id });
 		if (quizzes.id) {
-			return new ApiResult({
-				code: 0,
-				success: true,
+			return ApiResult.response({
 				data: quizzes,
 			});
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
+			return ApiResult.response({
 				data: quizzes,
 			});
 		}
-		return;
 	}
 }

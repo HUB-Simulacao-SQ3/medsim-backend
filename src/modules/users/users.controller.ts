@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Get, Param } from '@nestjs/common';
+import { Controller, Body, Post, Get, Param, UnauthorizedException } from '@nestjs/common';
 import { UserDTO } from './users.dto';
 import { UsersService } from './users.service';
 import { Public } from '../auth/auth.guard';
@@ -19,73 +19,46 @@ export class UsersController {
 
 		if (userCreated.id) {
 			const jwt = await this.authService.signIn(userCreated);
-			const { access_token } = jwt.response.data;
+			const { access_token } = jwt.data;
 			if (access_token) {
-				return new ApiResult({
-					code: 200,
-					data: {},
-					success: true,
-					message: 'Usuário criado com sucesso!',
-				});
+				return ApiResult.response({ data: access_token }, 'Usuário criado com sucesso!');
 			} else {
-				return new ApiResult({
-					code: 200,
-					data: jwt,
-					success: true,
-					message: 'Erro ao criar o usuário!',
-				});
+				return ApiResult.response({ data: access_token }, 'Erro ao criar usuário');
 			}
 		}
-
-		return new ApiResult({
-			code: 500,
-			data: {},
-			success: false,
-			message: 'Não foi possível criar o usuário',
-		});
+		throw new UnauthorizedException('Usuário não encontrado');
 	}
 
 	@Post('user')
 	async findMany(@Body() data: any) {
 		const user = await this.usersService.findOne(data);
 		if (user.id) {
-			return new ApiResult({
-				code: 200,
+			return ApiResult.response({
 				data: { ...user },
-				success: true,
-				message: 'Usuário encontrado com sucesso!',
 			});
 		} else {
-			return new ApiResult({
-				code: 200,
+			return ApiResult.response({
 				data: {},
-				success: true,
-				message: 'Erro ao tentar encontrar o usuário!',
 			});
 		}
 	}
 
 	@Get()
 	async findAll() {
-		return await this.usersService.findAll();
+		const users = await this.usersService.findAll();
+		return ApiResult.response({ data: users });
 	}
 
 	@Get(':id')
 	async findById(@Param('id') id: string) {
 		const user = await this.usersService.findOne({ id });
 		if (user.id) {
-			return new ApiResult({
-				code: 200,
+			return ApiResult.response({
 				data: { ...user },
-				success: true,
-				message: 'Usuário encontrado com sucesso!',
 			});
 		} else {
-			return new ApiResult({
-				code: 200,
+			return ApiResult.response({
 				data: {},
-				success: true,
-				message: 'Erro ao tentar encontrar o usuário!',
 			});
 		}
 	}

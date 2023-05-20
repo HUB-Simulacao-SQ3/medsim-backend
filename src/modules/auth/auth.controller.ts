@@ -1,10 +1,12 @@
 import { Body, Controller, Post, HttpCode, HttpStatus, Get, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './auth.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthDTO } from './auth.dto';
+import { ApiResult } from '../../core/api.dto';
 
 @ApiTags('Auth')
+@ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
 	constructor(private authService: AuthService) {}
@@ -18,6 +20,6 @@ export class AuthController {
 
 	@Get('profile')
 	getProfile(@Request() req: any) {
-		return req.user;
+		return ApiResult.response({ data: req.user });
 	}
 }

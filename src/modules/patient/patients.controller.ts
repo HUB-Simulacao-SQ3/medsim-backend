@@ -15,15 +15,11 @@ export class PatientsController {
 		data.userId = request['user']['id'];
 		const patient = await this.patientsService.create(data);
 		if (patient.id) {
-			return new ApiResult({
-				code: 0,
-				success: true,
+			return ApiResult.response({
 				data: patient,
 			});
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
+			return ApiResult.response({
 				data: patient,
 			});
 		}
@@ -33,15 +29,11 @@ export class PatientsController {
 	async findMany(@Body() data: any, @Request() request) {
 		const patientFindMany = await this.patientsService.findOne(data, request['user']['id']);
 		if (patientFindMany) {
-			return new ApiResult({
-				code: 0,
-				success: true,
+			return ApiResult.response({
 				data: patientFindMany,
 			});
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
+			return ApiResult.response({
 				data: patientFindMany,
 			});
 		}
@@ -52,15 +44,11 @@ export class PatientsController {
 		const userId = request['user']['id'];
 		const patientsFindAll = await this.patientsService.findAll(userId);
 		if (patientsFindAll) {
-			return new ApiResult({
-				code: 0,
-				success: true,
+			return ApiResult.response({
 				data: patientsFindAll,
 			});
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
+			return ApiResult.response({
 				data: patientsFindAll,
 			});
 		}
@@ -70,15 +58,11 @@ export class PatientsController {
 	async findById(@Param('id') id: string, @Request() request) {
 		const patientFindById = await this.patientsService.findOne({ id }, request['user']['id']);
 		if (patientFindById) {
-			return new ApiResult({
-				code: 0,
-				success: true,
+			return ApiResult.response({
 				data: patientFindById,
 			});
 		} else {
-			return new ApiResult({
-				code: 0,
-				success: false,
+			return ApiResult.response({
 				data: patientFindById,
 			});
 		}
