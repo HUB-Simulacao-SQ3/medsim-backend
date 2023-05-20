@@ -30,7 +30,7 @@ export class CasesService {
 		const cases = await this.prisma.case.findMany({
 			include: {
 				quiz: { select: { id: true } },
-				author: { select: { id: true } },
+				user: { select: { id: true } },
 			},
 		});
 

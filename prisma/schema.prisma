@@ -81,7 +81,7 @@ model Case {
   difficulty     Difficulty @default(EASY)
   quiz           Quiz?
 
-  author          User              @relation(fields: [userId], references: [id])
+  user            User              @relation(fields: [userId], references: [id])
   patient         Patient           @relation(fields: [patientId], references: [id])
   CaseUserHistory CaseUserHistory[]
 }
