@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class AuthDTO {
 	@ApiProperty()
-	@IsEmail()
+	@IsEmail({}, { message: 'Email inválido' })
 	email: string;
 
 	@ApiProperty()

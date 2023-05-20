@@ -34,16 +34,6 @@ export class CasesController {
 		}
 	}
 
-	@Get('all')
-	async findManyWhere() {
-		const cases = await this.casesService.findManyWhere({ includePatient: true, includeQuiz: true });
-		if (cases) {
-			return ApiResult.response({ data: cases });
-		} else {
-			return ApiResult.response({ data: cases });
-		}
-	}
-
 	@Get()
 	async findAll() {
 		const cases = await this.casesService.findAll();

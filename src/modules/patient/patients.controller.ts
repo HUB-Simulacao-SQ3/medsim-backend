@@ -1,5 +1,5 @@
-import { Controller, Body, Post, Get, Param, Request } from '@nestjs/common';
-import { PatientDTO } from './patients.dto';
+import { Controller, Body, Post, Get, Param, Request, Query } from '@nestjs/common';
+import { CreatePatientDTO, PatientOptionalFieldsDTO } from './patients.dto';
 import { PatientsService } from './patients.service';
 import { ApiResult } from '../../core/api.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -11,8 +11,8 @@ export class PatientsController {
 	constructor(private patientsService: PatientsService) {}
 
 	@Post()
-	async create(@Body() data: PatientDTO, @Request() request) {
-		data.userId = request['user']['id'];
+	async create(@Body() data: CreatePatientDTO, @Request() request) {
+		data.userId = request?.user?.id;
 		const patient = await this.patientsService.create(data);
 		if (patient.id) {
 			return ApiResult.response({
@@ -25,9 +25,9 @@ export class PatientsController {
 		}
 	}
 
-	@Post('patient')
-	async findMany(@Body() data: any, @Request() request) {
-		const patientFindMany = await this.patientsService.findOne(data, request['user']['id']);
+	@Get('filter')
+	async findMany(@Query() data: PatientOptionalFieldsDTO, @Request() request) {
+		const patientFindMany = await this.patientsService.findManyWhere(data, request?.user?.id);
 		if (patientFindMany) {
 			return ApiResult.response({
 				data: patientFindMany,
@@ -41,7 +41,7 @@ export class PatientsController {
 
 	@Get()
 	async findAll(@Request() request) {
-		const userId = request['user']['id'];
+		const userId = request?.user?.id;
 		const patientsFindAll = await this.patientsService.findAll(userId);
 		if (patientsFindAll) {
 			return ApiResult.response({
@@ -56,7 +56,7 @@ export class PatientsController {
 
 	@Get(':id')
 	async findById(@Param('id') id: string, @Request() request) {
-		const patientFindById = await this.patientsService.findOne({ id }, request['user']['id']);
+		const patientFindById = await this.patientsService.findOne({ id }, request?.user?.id);
 		if (patientFindById) {
 			return ApiResult.response({
 				data: patientFindById,

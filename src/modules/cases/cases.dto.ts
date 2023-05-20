@@ -1,5 +1,6 @@
-import { ApiProperty, PartialType, OmitType } from '@nestjs/swagger';
-import { Difficulty, Prisma } from '@prisma/client';
+import { PartialType, OmitType } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
+import { IsNotEmpty } from 'class-validator';
 
 enum ContentCreatedByEnum {
 	ALL = 'ALL',
@@ -15,12 +16,20 @@ enum DifficultyEnum {
 
 export class CaseDTO {
 	id?: string;
+
+	@IsNotEmpty({ message: 'É necessário informar o userId' })
 	userId: string;
+	@IsNotEmpty({ message: 'É necessário informar o patientId' })
 	patientId: string;
+	@IsNotEmpty({ message: 'É necessário informar o title' })
 	title: string;
+	@IsNotEmpty({ message: 'É necessário informar o description' })
 	description: string;
+	@IsNotEmpty({ message: 'É necessário informar o chiefComplaint' })
 	chiefComplaint: string;
+	@IsNotEmpty({ message: 'É necessário informar o scenery' })
 	scenery: string;
+
 	contentCreatedBy?: ContentCreatedByEnum;
 	difficulty?: DifficultyEnum;
 	quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutCaseInput;

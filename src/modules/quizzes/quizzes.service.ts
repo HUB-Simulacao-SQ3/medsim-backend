@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
-import { QuizzesDTO } from './quizzes.dto';
+import { QuizzesDTO, QuizzesOptionalFieldsDTO } from './quizzes.dto';
 
 @Injectable()
 export class QuizzesService {
@@ -11,9 +11,9 @@ export class QuizzesService {
 		return this.prisma.quiz.findFirst({ where: { OR: [{ id }] } });
 	}
 
-	async findManyWhere(data: Partial<QuizzesDTO>) {
-		const { id } = data;
-		return this.prisma.quiz.findMany({ where: { OR: [{ id }] } });
+	async findManyWhere(data: Partial<QuizzesOptionalFieldsDTO>) {
+		const { id, caseId, userId } = data;
+		return this.prisma.quiz.findMany({ where: { OR: [{ id }, { userId }, { caseId }] } });
 	}
 
 	async findAll() {

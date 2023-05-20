@@ -26,17 +26,6 @@ export class CasesService {
 		});
 	}
 
-	async findManyWhere({ includeQuiz, includePatient }) {
-		const include = {
-			...(includeQuiz ? { quiz: {} } : {}),
-			...(includePatient ? { patient: {} } : {}),
-		};
-
-		return this.prisma.case.findMany({
-			include,
-		});
-	}
-
 	async findAll() {
 		const cases = await this.prisma.case.findMany({
 			include: {

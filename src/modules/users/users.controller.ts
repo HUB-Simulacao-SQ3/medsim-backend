@@ -1,10 +1,10 @@
 import { Controller, Body, Post, Get, Param, UnauthorizedException } from '@nestjs/common';
-import { UserDTO } from './users.dto';
+import { CreateUserDTO } from './users.dto';
 import { UsersService } from './users.service';
 import { Public } from '../auth/auth.guard';
 import { AuthService } from '../auth/auth.service';
 import { ApiResult } from '../../core/api.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -14,7 +14,8 @@ export class UsersController {
 
 	@Public()
 	@Post()
-	async create(@Body() user: UserDTO) {
+	@ApiBody({ type: CreateUserDTO })
+	async create(@Body() user: CreateUserDTO) {
 		const userCreated = await this.usersService.create(user);
 
 		if (userCreated.id) {

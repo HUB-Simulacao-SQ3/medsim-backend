@@ -1,5 +1,5 @@
-import { Controller, Body, Post, Get, Param, Request } from '@nestjs/common';
-import { QuizzesDTO } from './quizzes.dto';
+import { Controller, Body, Post, Get, Param, Request, Query } from '@nestjs/common';
+import { QuizzesDTO, QuizzesOptionalFieldsDTO } from './quizzes.dto';
 import { QuizzesService } from './quizzes.service';
 import { ApiResult } from '../../core/api.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -26,10 +26,10 @@ export class QuizzesController {
 		return;
 	}
 
-	@Post('quiz')
-	async findMany(@Body() data: any) {
-		const quizzes = await this.quizzesService.findOne(data);
-		if (quizzes?.id) {
+	@Get('filter')
+	async findMany(@Query() data: QuizzesOptionalFieldsDTO) {
+		const quizzes = await this.quizzesService.findManyWhere(data);
+		if (quizzes?.length > 0) {
 			return ApiResult.response({
 				data: quizzes,
 			});
