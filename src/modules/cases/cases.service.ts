@@ -29,8 +29,8 @@ export class CasesService {
 	async findAll() {
 		const cases = await this.prisma.case.findMany({
 			include: {
-				user: { select: { id: true } },
 				quiz: { select: { id: true } },
+				author: { select: { id: true } },
 			},
 		});
 
