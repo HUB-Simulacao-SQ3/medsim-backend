@@ -20,6 +20,6 @@ export class AuthController {
 
 	@Get('profile')
 	getProfile(@Request() req: any) {
-		return ApiResult.response({ data: req.user });
+		return ApiResult.result({ data: req.user });
 	}
 }

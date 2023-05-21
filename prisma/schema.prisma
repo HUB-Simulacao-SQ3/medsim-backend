@@ -34,7 +34,7 @@ model User {
   Quiz            Quiz[]
   Case            Case[]
   Patient         Patient[]
-  CaseUserHistory CaseUserHistory[]
+  caseUserHistory CaseUserHistory[]
 }
 
 model Patient {
@@ -83,10 +83,11 @@ model Case {
 
   user            User              @relation(fields: [userId], references: [id])
   patient         Patient           @relation(fields: [patientId], references: [id])
-  CaseUserHistory CaseUserHistory[]
+  caseUserHistory CaseUserHistory[]
 }
 
 model CaseUserHistory {
+  id        String   @unique @default(uuid())
   caseId    String
   userId    String
   history   Json
@@ -95,6 +96,4 @@ model CaseUserHistory {
 
   user User @relation(fields: [userId], references: [id])
   case Case @relation(fields: [caseId], references: [id])
-
-  @@id([userId, caseId])
 }

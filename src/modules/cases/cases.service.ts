@@ -7,7 +7,22 @@ export class CasesService {
 	constructor(private prisma: PrismaService) {}
 	async findOne(data: Partial<CaseDTO>) {
 		const { id } = data;
-		return this.prisma.case.findFirst({ where: { id }, include: { quiz: true, patient: true } });
+		return this.prisma.case.findFirst({
+			where: { id },
+			include: {
+				quiz: true,
+				patient: true,
+				caseUserHistory: {
+					where: {
+						userId: data.userId,
+						caseId: data.id,
+					},
+					orderBy: {
+						createdAt: 'desc',
+					},
+				},
+			},
+		});
 	}
 
 	async filterDifficultyContentCreatedBy(data: Partial<CaseDTO>) {
@@ -16,7 +31,7 @@ export class CasesService {
 		return this.prisma.case.findMany({
 			where: {
 				OR: [{ chiefComplaint }, { description }, { id }, { scenery }, { title }, { difficulty }, { userId }],
-				AND: [data.contentCreatedBy === 'MY_CASES' ? { userId } : { NOT: { userId } }],
+				AND: [data.contentCreatedBy === 'MY_CASES' ? { userId } : data.contentCreatedBy === 'ALL' ? {} : { NOT: { userId } }],
 			},
 			include: {
 				quiz: {

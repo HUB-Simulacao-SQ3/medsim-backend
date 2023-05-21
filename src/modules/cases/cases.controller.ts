@@ -16,9 +16,9 @@ export class CasesController {
 		data.userId = request.user.id;
 		const cases = await this.casesService.create(data);
 		if (cases?.id) {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		} else {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		}
 	}
 
@@ -28,9 +28,9 @@ export class CasesController {
 		data.userId = request?.user?.id;
 		const cases = await this.casesService.filterDifficultyContentCreatedBy(data);
 		if (cases) {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		} else {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		}
 	}
 
@@ -38,19 +38,20 @@ export class CasesController {
 	async findAll() {
 		const cases = await this.casesService.findAll();
 		if (cases) {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		} else {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		}
 	}
 
 	@Get(':id')
-	async findById(@Param('id') id: string) {
-		const cases = await this.casesService.findOne({ id });
+	async findById(@Param('id') id: string, @Request() request) {
+		const userId = request.user.id;
+		const cases = await this.casesService.findOne({ id, userId });
 		if (cases.id) {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		} else {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		}
 	}
 
@@ -58,9 +59,9 @@ export class CasesController {
 	async delete(@Param('id') id: string) {
 		const cases = await this.casesService.delete(id);
 		if (cases) {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		} else {
-			return ApiResult.response({ data: cases });
+			return ApiResult.result({ data: cases });
 		}
 	}
 }

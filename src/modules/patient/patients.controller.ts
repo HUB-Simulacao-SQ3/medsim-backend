@@ -15,11 +15,11 @@ export class PatientsController {
 		data.userId = request?.user?.id;
 		const patient = await this.patientsService.create(data);
 		if (patient.id) {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: patient,
 			});
 		} else {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: patient,
 			});
 		}
@@ -29,11 +29,11 @@ export class PatientsController {
 	async findMany(@Query() data: PatientOptionalFieldsDTO, @Request() request) {
 		const patientFindMany = await this.patientsService.findManyWhere(data, request?.user?.id);
 		if (patientFindMany) {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: patientFindMany,
 			});
 		} else {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: patientFindMany,
 			});
 		}
@@ -44,11 +44,11 @@ export class PatientsController {
 		const userId = request?.user?.id;
 		const patientsFindAll = await this.patientsService.findAll(userId);
 		if (patientsFindAll) {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: patientsFindAll,
 			});
 		} else {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: patientsFindAll,
 			});
 		}
@@ -58,11 +58,11 @@ export class PatientsController {
 	async findById(@Param('id') id: string, @Request() request) {
 		const patientFindById = await this.patientsService.findOne({ id }, request?.user?.id);
 		if (patientFindById) {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: patientFindById,
 			});
 		} else {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: patientFindById,
 			});
 		}

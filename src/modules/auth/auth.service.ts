@@ -17,7 +17,7 @@ export class AuthService {
 		const payload = { user: authFind };
 
 		if (authFind?.id) {
-			return ApiResult.response(
+			return ApiResult.result(
 				{
 					data: {
 						access_token: await this.jwtService.signAsync(payload),

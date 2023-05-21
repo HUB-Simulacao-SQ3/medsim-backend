@@ -1,6 +1,6 @@
 import { PartialType, OmitType } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 enum ContentCreatedByEnum {
 	ALL = 'ALL',
@@ -17,6 +17,7 @@ enum DifficultyEnum {
 export class CaseDTO {
 	id?: string;
 
+	@IsOptional()
 	@IsNotEmpty({ message: 'É necessário informar o userId' })
 	userId: string;
 	@IsNotEmpty({ message: 'É necessário informar o patientId' })

@@ -6,9 +6,10 @@ import { PatientsModule } from './modules/patient/patients.module';
 import { QuizzesModule } from './modules/quizzes/quizzes.module';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './intercepts/AllExceptionsFilter';
+import { HistoryModule } from './modules/history/history.module';
 
 @Module({
-	imports: [AuthModule, UsersModule, CasesModule, PatientsModule, QuizzesModule],
+	imports: [AuthModule, UsersModule, CasesModule, PatientsModule, QuizzesModule, HistoryModule],
 	controllers: [],
 	providers: [
 		{

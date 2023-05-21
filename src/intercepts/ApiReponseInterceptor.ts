@@ -6,13 +6,13 @@ import { ApiInterceptorResult, ApiResult } from '../core/api.dto';
 export class ApiResponseInterceptor implements NestInterceptor {
 	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
 		const response = context.switchToHttp().getResponse();
-
 		return next.handle().pipe(
-			map((data: ApiResult<any>) => {
+			map(async (result: ApiResult<any>) => {
 				return new ApiInterceptorResult({
 					statusCode: response.statusCode,
 					success: true,
-					...data,
+					data: result.response.data,
+					message: result.message,
 				});
 			})
 		);

@@ -14,19 +14,29 @@ export class ApiInterceptorResult<T = any> {
 }
 
 export class ApiResult<T> {
-	private response: { data: T };
-	private message?: string;
+	private _response: { data: T };
+	private _message?: string;
 
 	constructor(response: { data: T }, message?: string) {
-		this.response = response;
-		this.message = message;
+		this._response = response;
+		this._message = message;
 	}
 
-	static response<T>(response: { data: T }, message?: string) {
-		const apiResult = new ApiResult<T>(response, message);
+	static result<T>(response: { data: T }, message?: string) {
+		return new ApiResult<T>(response, message);
+	}
+
+	get response() {
+		return this._response;
+	}
+	get message() {
+		return this._message;
+	}
+
+	get data() {
 		return {
-			data: apiResult.response.data,
-			message: apiResult.message,
+			...this._response.data,
+			message: this.message,
 		};
 	}
 }

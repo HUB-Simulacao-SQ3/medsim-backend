@@ -1,6 +1,6 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class PatientDTO {
 	id?: string;
@@ -9,6 +9,7 @@ export class PatientDTO {
 	firstName: string;
 	@IsNotEmpty({ message: 'É necessário informar o lastName' })
 	lastName: string;
+	@IsOptional()
 	@IsNotEmpty({ message: 'É necessário informar o userId' })
 	userId: string;
 	@IsNotEmpty({ message: 'É necessário informar o birthday' })

@@ -22,9 +22,10 @@ export class UsersController {
 			const jwt = await this.authService.signIn(userCreated);
 			const { access_token } = jwt.data;
 			if (access_token) {
-				return ApiResult.response({ data: access_token }, 'Usuário criado com sucesso!');
+				console.log('teste');
+				return ApiResult.result({ data: { access_token } }, 'Usuário criado com sucesso!');
 			} else {
-				return ApiResult.response({ data: access_token }, 'Erro ao criar usuário');
+				return ApiResult.result({ data: { access_token } }, 'Erro ao criar usuário');
 			}
 		}
 		throw new UnauthorizedException('Usuário não encontrado');
@@ -34,11 +35,11 @@ export class UsersController {
 	async findMany(@Body() data: any) {
 		const user = await this.usersService.findOne(data);
 		if (user.id) {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: { ...user },
 			});
 		} else {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: {},
 			});
 		}
@@ -47,18 +48,18 @@ export class UsersController {
 	@Get()
 	async findAll() {
 		const users = await this.usersService.findAll();
-		return ApiResult.response({ data: users });
+		return ApiResult.result({ data: users });
 	}
 
 	@Get(':id')
 	async findById(@Param('id') id: string) {
 		const user = await this.usersService.findOne({ id });
 		if (user.id) {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: { ...user },
 			});
 		} else {
-			return ApiResult.response({
+			return ApiResult.result({
 				data: {},
 			});
 		}
