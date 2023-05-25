@@ -7,10 +7,12 @@ import { QuizzesModule } from './modules/quizzes/quizzes.module';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './intercepts/AllExceptionsFilter';
 import { HistoryModule } from './modules/history/history.module';
+import { StatisticController } from './modules/statistic/statistic.controller';
+import { StatisticModule } from './modules/statistic/statistic.module';
 
 @Module({
-	imports: [AuthModule, UsersModule, CasesModule, PatientsModule, QuizzesModule, HistoryModule],
-	controllers: [],
+	imports: [AuthModule, UsersModule, CasesModule, PatientsModule, QuizzesModule, HistoryModule, StatisticModule],
+	controllers: [StatisticController],
 	providers: [
 		{
 			provide: APP_FILTER,

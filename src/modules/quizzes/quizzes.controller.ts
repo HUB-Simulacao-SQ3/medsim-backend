@@ -5,12 +5,14 @@ import { ApiResult } from '../../core/api.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { QuestionDTO } from '../../core/question.dto';
 import { HistoryService } from '../history/history.service';
+import { StatisticService } from '../statistic/statistic.service';
+import { CreateUserStatisticDTO } from '../statistic/statistic.dto';
 
 @ApiTags('Quizzes')
 @ApiBearerAuth()
 @Controller('quizzes')
 export class QuizzesController {
-	constructor(private quizzesService: QuizzesService, private historyService: HistoryService) {}
+	constructor(private quizzesService: QuizzesService, private historyService: HistoryService, private statisticsService: StatisticService) {}
 
 	@Post()
 	async create(@Body() data: QuizzesDTO, @Request() request) {
@@ -100,7 +102,9 @@ export class QuizzesController {
 			);
 		}
 
+		// verifica se a questão possui uma proxima alternativa
 		const nextQuestion = questionNode?.rollbackQuestions?.[+data?.questionSelected?.index]?.targetNode ?? 'CONCLUDED';
+
 		await this.historyService.create({
 			caseId: data.caseId,
 			history: {
@@ -110,6 +114,27 @@ export class QuizzesController {
 			},
 			userId,
 		});
+
+		const userStatisticExists = await this.statisticsService.findUniqueUserId({ userId });
+
+		if (userStatisticExists?.id) {
+			result.data.isCorrect ? userStatisticExists.hitCount++ : userStatisticExists.errorCount++;
+			if (nextQuestion === 'CONCLUDED') {
+				userStatisticExists.completedCount++;
+			}
+			await this.statisticsService.createOrUpdate({ userId, ...userStatisticExists });
+		} else {
+			const userStatisticCreate = {
+				hitCount: 0,
+				errorCount: 0,
+				completedCount: 0,
+			} as CreateUserStatisticDTO;
+			result.data.isCorrect ? userStatisticCreate.hitCount++ : userStatisticCreate.errorCount++;
+			if (nextQuestion === 'CONCLUDED') {
+				userStatisticCreate.completedCount++;
+			}
+			await this.statisticsService.createOrUpdate({ userId, ...userStatisticCreate });
+		}
 
 		return result;
 	}

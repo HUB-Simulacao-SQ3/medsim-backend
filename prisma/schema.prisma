@@ -19,22 +19,24 @@ enum Difficulty {
 }
 
 model User {
-  id        String   @id @unique @default(uuid())
+  id        String @id @unique @default(uuid())
+  email     String @unique
+  groupRole Role   @default(USER)
   firstName String
   lastName  String
   password  String
   image     Bytes?
-  email     String   @unique
   birthday  String
-  groupRole Role     @default(USER)
   results   Json?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   Quiz            Quiz[]
   Case            Case[]
   Patient         Patient[]
-  caseUserHistory CaseUserHistory[]
+  CaseUserHistory CaseUserHistory[]
+  UserStatistics  UserStatistics[]
 }
 
 model Patient {
@@ -52,8 +54,7 @@ model Patient {
   updatedAt      DateTime @updatedAt
 
   Case Case[]
-
-  user User @relation(fields: [userId], references: [id])
+  user User   @relation(fields: [userId], references: [id])
 }
 
 model Quiz {
@@ -81,8 +82,11 @@ model Case {
   difficulty     Difficulty @default(EASY)
   quiz           Quiz?
 
-  user            User              @relation(fields: [userId], references: [id])
-  patient         Patient           @relation(fields: [patientId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  longerDuration  UserStatistics[]  @relation("longerDuration")
+  shorterDuration UserStatistics[]  @relation("shorterDuration")
   caseUserHistory CaseUserHistory[]
 }
 
@@ -96,4 +100,21 @@ model CaseUserHistory {
 
   user User @relation(fields: [userId], references: [id])
   case Case @relation(fields: [caseId], references: [id])
+}
+
+model UserStatistics {
+  id                        String  @unique @default(uuid())
+  userId                    String  @unique
+  caseLongerDurationCaseId  String?
+  caseShorterDurationCaseId String?
+  completedCount            Int?    @default(0)
+  hitCount                  Int     @default(0)
+  errorCount                Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user            User? @relation(fields: [userId], references: [id])
+  longerDuration  Case? @relation("longerDuration", fields: [caseLongerDurationCaseId], references: [id])
+  shorterDuration Case? @relation("shorterDuration", fields: [caseShorterDurationCaseId], references: [id])
 }

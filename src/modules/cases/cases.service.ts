@@ -26,12 +26,17 @@ export class CasesService {
 	}
 
 	async filterDifficultyContentCreatedBy(data: Partial<CaseDTO>) {
-		const { chiefComplaint, description, id, scenery, title, difficulty, userId } = data;
+		const { chiefComplaint, description, id, scenery, title, difficulty, userId, contentCreatedBy } = data;
 
 		return this.prisma.case.findMany({
 			where: {
-				OR: [{ chiefComplaint }, { description }, { id }, { scenery }, { title }, { difficulty }, { userId }],
-				AND: [data.contentCreatedBy === 'MY_CASES' ? { userId } : data.contentCreatedBy === 'ALL' ? {} : { NOT: { userId } }],
+				chiefComplaint,
+				description,
+				id,
+				scenery,
+				title,
+				difficulty,
+				...(contentCreatedBy === 'MY_CASES' ? { userId } : contentCreatedBy === 'OTHERS' ? { NOT: { userId } } : {}),
 			},
 			include: {
 				quiz: {

@@ -25,12 +25,16 @@ export class CasesController {
 	@Get('filter')
 	@ApiQuery({ type: CaseOptionalFieldsDTO, required: false })
 	async filterDifficultyContentCreatedBy(@Query() data: Partial<CaseDTO>, @Request() request) {
-		data.userId = request?.user?.id;
-		const cases = await this.casesService.filterDifficultyContentCreatedBy(data);
-		if (cases) {
-			return ApiResult.result({ data: cases });
+		if (Object.keys(data).length > 0) {
+			data.userId = request?.user?.id;
+			const cases = await this.casesService.filterDifficultyContentCreatedBy(data);
+			if (cases) {
+				return ApiResult.result({ data: cases });
+			} else {
+				return ApiResult.result({ data: cases });
+			}
 		} else {
-			return ApiResult.result({ data: cases });
+			return this.findAll();
 		}
 	}
 
