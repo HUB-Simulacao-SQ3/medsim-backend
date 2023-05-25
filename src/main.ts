@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ApiResponseInterceptor } from './intercepts/apiReponseInterceptor';
+import { ApiResponseInterceptor } from './intercepts/apiResponseInterceptor';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
