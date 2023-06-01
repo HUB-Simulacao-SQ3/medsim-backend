@@ -16,7 +16,7 @@ export class UserDTO {
 	@IsNotEmpty({ message: 'É necessário informar o birthday' })
 	birthday: string;
 
-	image?: Buffer | null;
+	image?: string;
 	groupRole?: Role;
 	createdAt?: Date | string;
 	updatedAt?: Date | string;
@@ -39,4 +39,5 @@ export class CreateUserDTO extends OmitType(UserDTO, [
 	'Case',
 	'Patient',
 ] as const) {}
+export class UpdateUserDTO extends OmitType(CreateUserDTO, ['password'] as const) {}
 export class UserOptionalFieldsDTO extends PartialType(CreateUserDTO) {}

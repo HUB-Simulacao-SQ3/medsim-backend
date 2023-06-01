@@ -1,5 +1,5 @@
-import { Controller, Body, Post, Get, Param, UnauthorizedException } from '@nestjs/common';
-import { CreateUserDTO } from './users.dto';
+import { Controller, Body, Post, Get, Request, Param, Patch, UnauthorizedException } from '@nestjs/common';
+import { CreateUserDTO, UpdateUserDTO } from './users.dto';
 import { UsersService } from './users.service';
 import { Public } from '../auth/auth.guard';
 import { AuthService } from '../auth/auth.service';
@@ -15,17 +15,35 @@ export class UsersController {
 	@Public()
 	@Post()
 	@ApiBody({ type: CreateUserDTO })
-	async create(@Body() user: CreateUserDTO) {
-		const userCreated = await this.usersService.create(user);
+	async create(@Body() user: CreateUserDTO, @Request() request) {
+		const userId = request.user.id;
+		const userCreated = await this.usersService.create({ ...user, id: userId });
 
 		if (userCreated.id) {
 			const jwt = await this.authService.signIn(userCreated);
 			const { access_token } = jwt.data;
 			if (access_token) {
-				console.log('teste');
 				return ApiResult.result({ data: { access_token } }, 'Usuário criado com sucesso!');
 			} else {
 				return ApiResult.result({ data: { access_token } }, 'Erro ao criar usuário');
+			}
+		}
+		throw new UnauthorizedException('Usuário não encontrado');
+	}
+
+	@Patch()
+	@ApiBody({ type: CreateUserDTO })
+	async update(@Body() user: UpdateUserDTO, @Request() request) {
+		const userId = request.user.id;
+		const userCreated = await this.usersService.update({ ...user, id: userId });
+
+		if (userCreated.id) {
+			const jwt = await this.authService.signIn(userCreated);
+			const { access_token } = jwt.data;
+			if (access_token) {
+				return ApiResult.result({ data: { access_token } }, 'Usuário atualizado com sucesso!');
+			} else {
+				return ApiResult.result({ data: { access_token } }, 'Erro ao atualizado usuário');
 			}
 		}
 		throw new UnauthorizedException('Usuário não encontrado');

@@ -25,7 +25,7 @@ model User {
   firstName String
   lastName  String
   password  String
-  image     Bytes?
+  image     Json?
   birthday  String
   results   Json?
 
