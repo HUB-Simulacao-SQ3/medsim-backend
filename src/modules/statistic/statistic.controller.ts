@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Post, Query, Request } from '@nestjs/common';
 import { HistoryService } from '../history/history.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { StatisticService } from './statistic.service';
 import { ApiResult } from '../../core/api.dto';
 
 @ApiBearerAuth()
+@ApiTags('Statistics')
 @Controller('statistic')
 export class StatisticController {
 	constructor(private statisticsService: StatisticService, private historyService: HistoryService) {}
